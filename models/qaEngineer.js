@@ -5,6 +5,7 @@ const Schema = mongoose.Schema
 
 const QaEngineerSchema = Schema ({
 
+    puesto: String,
     label: String,
     name: String,
     extract: String,

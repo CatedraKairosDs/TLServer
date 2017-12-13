@@ -5,6 +5,7 @@ const Schema = mongoose.Schema
 
 const SoftwareArchitectSchema = Schema ({
 
+    puesto: String,
     label: String,
     name: String,
     extract: String,

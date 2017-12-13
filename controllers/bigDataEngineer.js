@@ -5,7 +5,7 @@ const Profiles = require('../models/profiles')
 
 
 function getBigDataEngineers (req, res) {
-    Profiles.find({label : 'bigDataEngineer'}, (err, BigDataEngineersProfiles) => { 
+    Profiles.find({puesto : 'bigDataEngineer'}, (err, BigDataEngineersProfiles) => { 
         if (err) return res.status(500).send({message:`Error al realizar getFindAll: ${err}`})
         if(!Profiles) return res.status(404).send({message: `No hay perfiles Back End :${err}`}) 
 
