@@ -11,6 +11,7 @@ function saveProfiles (req, res){
      //Creamos un nuevo perfilen la base de datos
     let profile = new Profiles()
     
+    profile.puesto = req.body.puesto
     profile.label = req.body.label
     profile.name = req.body.name
     profile.extract = req.body.extract
