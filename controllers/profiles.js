@@ -7,7 +7,7 @@ const Profiles = require('../models/profiles')
 function saveProfiles (req, res){
     
     
-    console.log(req.body)
+    //console.log(req.body)
      //Creamos un nuevo perfilen la base de datos
     let profile = new Profiles()
     
@@ -28,7 +28,7 @@ function saveProfiles (req, res){
     profile.comment = JSON.stringify(req.body.comment)
     
     profile.save((err, profileStored) => {
-        console.log(`la variable profile es: ${profile}`)
+        //console.log(`la variable profile es: ${profile}`)
 
         if (err) return res.status(500).send({message: `Error en el lado del sevidor: ${err}`})
         

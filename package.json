@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": " ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Roberto Llop Cardenal",
@@ -13,6 +13,9 @@
     "body-parser": "^1.18.2",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "mongod": "^2.0.0",
+    "mongodb": "^3.0.0-rc0",
+    "mongodb-server": "^1.0.0",
     "mongoose": "^4.13.6"
   },
   "devDependencies": {

@@ -1,0 +1,8 @@
+`open()` is deprecated in mongoose >= 4.11.0, use `openUri()` instead, or set the `useMongoClient` option if using `connect()` or `createConnection()`. See http://mongoosejs.com/docs/connections.html#use-mongo-client
+Conexion a la base de datos establecida
+API REST corriendo en http://localhost:443
+MENSAJE GUARDADO
+MENSAJE GUARDADO
+MENSAJE GUARDADO
+MENSAJE GUARDADO
+Wed, 13 Dec 2017 09:00:03 GMT express deprecated res.send(status, body): Use res.status(status).send(body) instead at controllers/profiles.js:48:13
