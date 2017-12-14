@@ -5,7 +5,7 @@ const Skills = require('../models/skills')
 
 
 
-function saveProfiles (req, res){
+module.exports.saveProfiles = function saveProfiles (req, res){
     
     
     //console.log(req.body)
@@ -35,7 +35,6 @@ function saveProfiles (req, res){
         if (err) return res.status(500).send({message: `Error en el lado del sevidor: ${err}`})
         
         res.status(200).send({perfil: profileStored})
-        console.log('MENSAJE GUARDADO')
     
     })
 
@@ -82,15 +81,43 @@ function saveProfiles (req, res){
     console.log('MENSAJE GUARDADO')
 }
 
-function getProfiles (req, res) {
-    
-    Profiles.find({}, (err, profiles) => { 
+module.exports.getById = function getById (req, res) {
+    Profiles.findById(req.params.Id, (err, profile) => {
+        if (err) return res.status(500).send({message:`Error al realizar getById: ${err}`})
+        if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.Id+` no existe :${err}`}) 
+
+        res.status(200).send({profile})
+    });
+}
+
+module.exports.getProfiles = function getProfiles (req, res) {
+    let params = req.query
+    let query = {};
+    let keys = ['puesto', 'label', 'name'];
+    for(let i = 0; i < keys.length; i++){
+        let key = keys[i];
+        if (params[key]) {
+            query[key] = params[key]; 
+        }
+    }
+    Profiles.find(query, (err, profiles) => { 
         if (err) return res.status(500).send({message:`Error al realizar getFindAll: ${err}`})
-        if(!Profiles) return res.status(404).send({message: `No hay perfiles :${err}`}) 
+        if(!profiles) return res.status(404).send({message: `No hay perfiles: ${err}`}) 
 
         res.send(200, {profiles})
+    });
+}
+
+module.exports.deleteProfile = function deleteProfile (req, res) {
+    Profiles.findById(req.params.Id, (err, profile)  => {
+        if (!profile) res.status(404).send({message: `Perfil con id: `+req.params.Id+` no existe: ${err}`})
+        
+        Profiles.remove(err => {
+            if (err) res.status(500).send({message:`Error por parte del servidor al intentar eliminar el perfil: ${err}`})
+            res.status(200).send({message: 'El perfil ha sido eliminado'})
+        })
     })
 }
 
 
-module.exports = { saveProfiles, getProfiles }
+
