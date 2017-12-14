@@ -1,6 +1,7 @@
 'use strict'
 
 const Profiles = require('../models/profiles')
+const Skills = require('../models/skills')
 
 
 
@@ -37,6 +38,47 @@ function saveProfiles (req, res){
         console.log('MENSAJE GUARDADO')
     
     })
+
+    for(var i = 0; i < JSON.parse(profile.skills).length; i++) {
+        var skillAux = profile.skills[i].jsonSkill.skill;
+        Skills.find({skillName : skillAux}, (err, resp) => {
+            if (err) {
+                var lastSkill = Skills.find({}).sort({skillKey: -1}).limit(1).toArray();
+                if (lastSkill.length === 0) {
+                    let skill = new Skills();
+                    skill.skillName = skillAux;
+                    skill.skillKey = 0;
+                    skill.save((err, skillSaved) => {
+                        if (err) {
+                            console.log('La skill no se ha guardado');
+                            return;
+                        } else {
+                            console.log('Skill guardada');
+                        }
+                    });
+                } else {
+                    let skill = new Skills();
+                    skill.skillName = skillAux;
+                    skill.skillKey = lastSkill[0].skillKey+1;
+                    skill.save((err, skillSaved) => {
+                        if (err) {
+                            console.log('La skill no se ha guardado');
+                            return;
+                        } else {
+                            console.log('Skill guardada');
+                        }
+                    })
+                }
+                var lastKey = lastSkill
+            } else {
+                return;
+            }
+        })
+    }
+
+    //Hay que hacer algo similar a lo de las skills pero con las compañias...
+
+
     console.log('MENSAJE GUARDADO')
 }
 
