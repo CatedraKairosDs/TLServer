@@ -45,10 +45,12 @@ router.get('/api-linkedin/v1/profiles/tester_QAAnalyst', tester_QAAnalystControl
 router.get('/api-linkedin/v1/profiles/uxDesigner', uxDesignerController.getUxDesigners)
 
 
-router.get('/api-linkedin/v1/profiles/frontend/:frontEndId', frontEndController.getFrontEnd)
+router.get('/api-linkedin/v1/profiles/:Id', profilesController.getById)
+router.get('/api-linkedin/v1/profiles', profilesController.getProfiles)
+
 router.post('/api-linkedin/v1/profiles', profilesController.saveProfiles)
 router.put('/api-linkedin/v1/profiles/frontEnd/:frontEndId', frontEndController.updateFrontEnd)
-router.delete('/api-linkedin/v1/profiles/frontEnd/:frontEndId', frontEndController.deleteFrontEnd)
+router.delete('/api-linkedin/v1/profiles/:Id', profilesController.deleteProfile)
 
 
 module.exports = router
