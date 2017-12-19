@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+var mongoosePaginate = require('mongoose-paginate')
 
 const ProfilesSchema = Schema ({
 
