@@ -11,7 +11,7 @@ const Companies = require('../models/companies')
 
 //guardado de perfil
 function saveProfiles (req, res){
-    
+    console.log(req.body.puesto)    
     let profile = new Profiles()
 
     profile.puesto = req.body.puesto
