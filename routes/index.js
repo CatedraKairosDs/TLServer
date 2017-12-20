@@ -13,11 +13,12 @@ router.get('/', function(req, res, next) {
     res.render('index');
 });
 
-router.get('/api-linkedin/v1/profiles/:Id', profilesController.getById)
+router.get('/api-linkedin/v1/profiles/id/:Id', profilesController.getById)
+router.get('/api-linkedin/v1/profiles/idLinkedin/:idLinkedin', profilesController.getByLinkedinId)
 router.get('/api-linkedin/v1/profiles', profilesController.getProfiles)
 router.post('/api-linkedin/v1/profiles', profilesController.saveProfiles)
-router.get('/api-linkedin/v1/profiles/details/skills', profilesController.getSkills)
-router.get('/api-linkedin/v1/profiles/details/companies', profilesController.getCompanies)
+router.get('/api-linkedin/v1/profiles/skills', profilesController.getSkills)
+router.get('/api-linkedin/v1/profiles/companies', profilesController.getCompanies)
 
 
 

@@ -4,7 +4,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const ProfilesSchema = Schema ({
-
+    
+    idLinkedin: String,
     puesto: String,
     label: String,
     name: String,

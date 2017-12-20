@@ -6,14 +6,12 @@ const Profiles = require('../models/profiles')
 const Skills = require('../models/skills')
 const Companies = require('../models/companies')
 
-
-
-
 //guardado de perfil
 function saveProfiles (req, res){
     
     let profile = new Profiles()
 
+    profile.idLinkedin = req.body.idLinkedin 
     profile.puesto = req.body.puesto
     profile.label = req.body.label
     profile.name = req.body.name
@@ -151,6 +149,19 @@ function getById (req, res) {
     });
 }
 
+//Devuelve un perfil por el linkedinID
+function getByLinkedinId (req, res) {
+
+    var idLinkedin = String(req.params.idLinkedin)
+
+    Profiles.find({idLinkedin :idLinkedin}, (err, profile) => {
+        if (err) return res.status(500).send({message:`Error al realizar getById: ${err}`})
+        if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.idLinkedin+` no existe :${err}`}) 
+        res.status(200).send({profile})
+    });
+}
+
+
 //devuelve un perfil dependiendo del parámetro de la query: puesto, label, name
 function getProfiles (req, res) {
     
@@ -178,7 +189,7 @@ function getProfiles (req, res) {
             return res.send(200, {
                 data: result,
                 meta:{
-                    'total-pages': pageCount
+                    'totalPages': pageCount
                 }
             })
         })
@@ -226,5 +237,6 @@ module.exports = {
     getProfiles,
     deleteProfile,
     getSkills,
-    getCompanies
+    getCompanies,
+    getByLinkedinId
 }
