@@ -1,5 +1,3 @@
-//import { createConnection } from 'net';
-
 'use strict'
 
 const Profiles = require('../models/profiles')
@@ -39,7 +37,6 @@ function saveProfiles (req, res){
 
     console.log('MENSAJE GUARDADO')
 }
-
 
 //Esta función sólo se encarga de sacar las skills de cada perfil.
 function saveSkill(profile) {
@@ -103,7 +100,6 @@ function saveCompany(profile){
     })
 }
 
-
 function searchForCompany(companyAux){
 
     return new Promise((resolve, reject) => {
@@ -142,9 +138,9 @@ function saveCompanyName(companyAux){
 
 //Devuelve un perfil por el ID
 function getById (req, res) {
-    Profiles.findById(req.params.Id, (err, profile) => {
+    Profiles.findById(req.params.id, (err, profile) => {
         if (err) return res.status(500).send({message:`Error al realizar getById: ${err}`})
-        if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.Id+` no existe :${err}`}) 
+        if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.id+` no existe :${err}`}) 
         res.status(200).send({profile})
     });
 }
@@ -160,7 +156,6 @@ function getByLinkedinId (req, res) {
         res.status(200).send({profile})
     });
 }
-
 
 //devuelve un perfil dependiendo del parámetro de la query: puesto, label, name
 function getProfiles (req, res) {
@@ -179,9 +174,8 @@ function getProfiles (req, res) {
     try{ 
         
         let result, itemCount; 
-        console.log(query);
         Promise.all([
-            Profiles.find(query).limit(req.query.limit).skip(req.skip).lean().exec(), 
+            Profiles.find(query).sort({_id: -1}).limit(req.query.limit).skip(req.skip).lean().exec(), 
             Profiles.count({})
         ]).then(promisses => {
             const [result, itemCount] = promisses;
@@ -199,16 +193,18 @@ function getProfiles (req, res) {
     }
 }
 
-
 //borra un perfil por ID 
 function deleteProfile (req, res) {
-    Profiles.findById(req.params.Id, (err, profile)  => {
-        if (!profile) res.status(404).send({message: `Perfil con id: `+req.params.Id+` no existe: ${err}`})
-        
-        Profiles.remove(err => {
-            if (err) res.status(500).send({message:`Error por parte del servidor al intentar eliminar el perfil: ${err}`})
-            res.status(200).send({message: 'El perfil ha sido eliminado'})
-        })
+    Profiles.findById(req.params.id, (err, profile)  => {
+        if (!profile) {
+            res.status(404).send({message: `Perfil con id: `+req.params.id+` no existe: ${err}`})
+            return;
+        } else {
+            profile.remove(err => {
+                if (err) res.status(500).send({message:`Error por parte del servidor al intentar eliminar el perfil: ${err}`})
+                res.status(200).send({message: 'El perfil ha sido eliminado'})
+            })
+        }
     })
 }
 
@@ -229,7 +225,6 @@ function getCompanies (req, res) {
         res.send(200, {companies})
     })
 }
-
 
 module.exports = {
     saveProfiles,

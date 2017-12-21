@@ -2,6 +2,10 @@
 
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+//var autoIncrement = require('mongoose-auto-increment')
+
+//var connection = mongoose.connection
+//autoIncrement.initialize(connection)
 
 const ProfilesSchema = Schema ({
     
@@ -25,5 +29,6 @@ const ProfilesSchema = Schema ({
     comment: String
 })
 
-
+//ProfilesSchema.plugin(autoIncrement.plugin, 'Profile')
+//var Profile = connection.model('Profile', CompanySchema)
 module.exports = mongoose.model('profiles', ProfilesSchema)
