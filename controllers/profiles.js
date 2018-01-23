@@ -191,8 +191,21 @@ function getProfiles (req, res) {
     }
 }
 
+//update un perfil, propiedades label, puesto y comentario
+function updateProfile(req, res) {
+    
+    let update = req.body;
+    Profiles.findByIdAndUpdate(req.params.id, update, (err, profileUpdated) => {
+        if (err) res.status(500).send({message:`Error por parte del servidor al intentar actualizar el perfil: ${err}`});
+        res.status(200).send({message: 'El perfil ha sido actualizado'})
+    })
+};
+
+
+
 //borra un perfil por ID 
 function deleteProfile (req, res) {
+    
     Profiles.findById(req.params.id, (err, profile)  => {
         if (!profile) {
             res.status(404).send({message: `Perfil con id: `+req.params.id+` no existe: ${err}`})
@@ -204,7 +217,7 @@ function deleteProfile (req, res) {
             })
         }
     })
-}
+};
 
 function getSkills (req, res) {
     
@@ -213,7 +226,7 @@ function getSkills (req, res) {
         if(!Profiles) return res.status(404).send({message: `No hay skills:${err}`}) 
         res.send(200, {skills})
     })
-}
+};
 
 function getCompanies (req, res) {
 
@@ -222,7 +235,7 @@ function getCompanies (req, res) {
         if(!Profiles) return res.status(404).send({message: `No hay companies:${err}`}) 
         res.send(200, {companies})
     })
-}
+};
 
 module.exports = {
     saveProfiles,
@@ -231,5 +244,6 @@ module.exports = {
     deleteProfile,
     getSkills,
     getCompanies,
-    getByLinkedinId
+    getByLinkedinId,
+    updateProfile
 }

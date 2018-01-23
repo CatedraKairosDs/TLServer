@@ -1,21 +1,23 @@
 'use strict'
 
-const express = require('express')
-const profilesController = require('../controllers/profiles')
-const router = express.Router()
+const express = require('express');
+const profilesController = require('../controllers/profiles');
+const router = express.Router();
 
 router.get('/', function(req, res, next) {
     res.render('index');
 });
 
-router.get('/api-linkedin/v1/profiles/id/:id', profilesController.getById)
-router.get('/api-linkedin/v1/profiles/idLinkedin/:idLinkedin', profilesController.getByLinkedinId)
-router.get('/api-linkedin/v1/profiles', profilesController.getProfiles)
-router.get('/api-linkedin/v1/profiles/skills', profilesController.getSkills)
-router.get('/api-linkedin/v1/profiles/companies', profilesController.getCompanies)
+router.get('/api-linkedin/v1/profiles/id/:id', profilesController.getById);
+router.get('/api-linkedin/v1/profiles/idLinkedin/:idLinkedin', profilesController.getByLinkedinId);
+router.get('/api-linkedin/v1/profiles', profilesController.getProfiles);
+router.get('/api-linkedin/v1/profiles/skills', profilesController.getSkills);
+router.get('/api-linkedin/v1/profiles/companies', profilesController.getCompanies);
 
-router.post('/api-linkedin/v1/profiles', profilesController.saveProfiles)
+router.post('/api-linkedin/v1/profiles', profilesController.saveProfiles);
 
-router.delete('/api-linkedin/v1/profiles/:id', profilesController.deleteProfile)
+router.put('/api-linkedin/v1/profiles/:id', profilesController.updateProfile);
 
-module.exports = router
+router.delete('/api-linkedin/v1/profiles/:id', profilesController.deleteProfile);
+
+module.exports = router;
