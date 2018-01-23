@@ -9,7 +9,7 @@ function saveProfiles (req, res){
     console.log(req.body.puesto)    
     let profile = new Profiles()
 
-    profile.idLinkedin = req.body.idLinkedin 
+    profile.linkedinId = req.body.linkedinId 
     profile.puesto = req.body.puesto
     profile.label = req.body.label
     profile.name = req.body.name
@@ -148,9 +148,7 @@ function getById (req, res) {
 //Devuelve un perfil por el linkedinID
 function getByLinkedinId (req, res) {
 
-    var idLinkedin = String(req.params.idLinkedin)
-
-    Profiles.find({idLinkedin :idLinkedin}, (err, profile) => {
+    Profiles.find({linkedinId: req.params.idLinkedin}, (err, profile) => {
         if (err) return res.status(500).send({message:`Error al realizar getById: ${err}`})
         if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.idLinkedin+` no existe :${err}`}) 
         res.status(200).send({profile})
@@ -176,7 +174,7 @@ function getProfiles (req, res) {
         let result, itemCount; 
         Promise.all([
             Profiles.find(query).sort({_id: -1}).limit(req.query.limit).skip(req.skip).lean().exec(), 
-            Profiles.count({})
+            Profiles.find(query).count({})
         ]).then(promisses => {
             const [result, itemCount] = promisses;
             const pageCount = Math.ceil(itemCount / req.query.limit)
