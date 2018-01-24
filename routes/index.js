@@ -13,6 +13,7 @@ router.get('/api-linkedin/v1/profiles/idLinkedin/:linkedinId', profilesControlle
 router.get('/api-linkedin/v1/profiles', profilesController.getProfiles);
 router.get('/api-linkedin/v1/profiles/skills', profilesController.getSkills);
 router.get('/api-linkedin/v1/profiles/companies', profilesController.getCompanies);
+router.get('/api-linkedin/v1/allProfiles', profilesController.getAllProfiles);
 
 router.post('/api-linkedin/v1/profiles', profilesController.saveProfiles);
 
