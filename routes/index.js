@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/api-linkedin/v1/profiles/id/:id', profilesController.getById);
-router.get('/api-linkedin/v1/profiles/idLinkedin/:idLinkedin', profilesController.getByLinkedinId);
+router.get('/api-linkedin/v1/profiles/idLinkedin/:linkedinId', profilesController.getByLinkedinId);
 router.get('/api-linkedin/v1/profiles', profilesController.getProfiles);
 router.get('/api-linkedin/v1/profiles/skills', profilesController.getSkills);
 router.get('/api-linkedin/v1/profiles/companies', profilesController.getCompanies);

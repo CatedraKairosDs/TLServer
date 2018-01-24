@@ -5,8 +5,7 @@ const Skills = require('../models/skills')
 const Companies = require('../models/companies')
 
 //guardado de perfil
-function saveProfiles (req, res){
-    console.log(req.body.puesto)    
+function saveProfiles (req, res){    
     let profile = new Profiles()
 
     profile.linkedinId = req.body.linkedinId 
@@ -148,9 +147,9 @@ function getById (req, res) {
 //Devuelve un perfil por el linkedinID
 function getByLinkedinId (req, res) {
 
-    Profiles.find({linkedinId: req.params.idLinkedin}, (err, profile) => {
+    Profiles.find({linkedinId: req.params.linkedinId}, (err, profile) => {
         if (err) return res.status(500).send({message:`Error al realizar getById: ${err}`})
-        if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.idLinkedin+` no existe :${err}`}) 
+        if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.linkedinId+` no existe :${err}`}) 
         res.status(200).send({profile})
     });
 }
@@ -192,8 +191,7 @@ function getProfiles (req, res) {
 }
 
 //update un perfil, propiedades label, puesto y comentario
-function updateProfile(req, res) {
-    
+function updateProfile(req, res) {    
     let update = req.body;
     Profiles.findByIdAndUpdate(req.params.id, update, (err, profileUpdated) => {
         if (err) res.status(500).send({message:`Error por parte del servidor al intentar actualizar el perfil: ${err}`});
