@@ -9,7 +9,7 @@ const Schema = mongoose.Schema
 
 const ProfilesSchema = Schema ({
     
-    idLinkedin: String,
+    linkedinId: String,
     puesto: String,
     label: String,
     name: String,

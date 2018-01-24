@@ -9,7 +9,7 @@ function saveProfiles (req, res){
     console.log(req.body.puesto)    
     let profile = new Profiles()
 
-    profile.idLinkedin = req.body.idLinkedin 
+    profile.linkedinId = req.body.linkedinId 
     profile.puesto = req.body.puesto
     profile.label = req.body.label
     profile.name = req.body.name
@@ -100,6 +100,7 @@ function saveCompany(profile){
     })
 }
 
+//En esta función se busca si ya estaba guardada en la base de datos
 function searchForCompany(companyAux){
 
     return new Promise((resolve, reject) => {
@@ -120,6 +121,7 @@ function searchForCompany(companyAux){
         });
 }
 
+//Aquí se guarda la empresa en la base de datos
 function saveCompanyName(companyAux){
     return new Promise((resolve, reject) => {           
         let company = new Companies()
@@ -148,11 +150,11 @@ function getById (req, res) {
 //Devuelve un perfil por el linkedinID
 function getByLinkedinId (req, res) {
 
-    var idLinkedin = String(req.params.idLinkedin)
+    var linkedinId = String(req.params.linkedinId)
 
-    Profiles.find({idLinkedin :idLinkedin}, (err, profile) => {
+    Profiles.find({linkedinId :linkedinId}, (err, profile) => {
         if (err) return res.status(500).send({message:`Error al realizar getById: ${err}`})
-        if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.idLinkedin+` no existe :${err}`}) 
+        if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.linkedinId+` no existe :${err}`}) 
         res.status(200).send({profile})
     });
 }
@@ -193,6 +195,16 @@ function getProfiles (req, res) {
     }
 }
 
+//Devuelve todos los perfiles
+function getAllProfiles(req, res){
+    
+    Profiles.find({}, (err, allProfiles) => {
+        if (err) res.status(500).send({message:`Error por parte del servidor al intentar devolver todos los perfiles: ${err}`});
+        if (allProfiles.length < 1) res.send(200, {message: 'No hay perfiles guardados en la base de datos'})
+        res.send(200, {allProfiles});
+    })
+};
+
 //update un perfil, propiedades label, puesto y comentario
 function updateProfile(req, res) {
     
@@ -202,8 +214,6 @@ function updateProfile(req, res) {
         res.status(200).send({message: 'El perfil ha sido actualizado'})
     })
 };
-
-
 
 //borra un perfil por ID 
 function deleteProfile (req, res) {
@@ -247,5 +257,6 @@ module.exports = {
     getSkills,
     getCompanies,
     getByLinkedinId,
+    getAllProfiles,
     updateProfile
 }
