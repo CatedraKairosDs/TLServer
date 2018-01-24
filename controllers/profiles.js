@@ -217,8 +217,7 @@ function getAllProfiles(req, res){
 };
 
 //update un perfil, propiedades label, puesto y comentario
-function updateProfile(req, res) {
-    
+function updateProfile(req, res) {    
     let update = req.body;
     Profiles.findByIdAndUpdate(req.params.id, update, (err, profileUpdated) => {
         if (err) res.status(500).send({message:`Error por parte del servidor al intentar actualizar el perfil: ${err}`});
