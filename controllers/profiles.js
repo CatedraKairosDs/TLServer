@@ -31,7 +31,7 @@ function saveProfiles (req, res){
         
         if (err) return res.status(500).send({message: `Error en el lado del sevidor: ${err}`})
         res.status(200).send({perfil: profileStored})
-        saveSkill(profile).then(() => { console.log('ya se han guardado todas las skills')});
+        saveSkill(profile).then(() => {console.log('ya se han guardado todas las skills')});
         saveCompany(profile).then(() => {console.log('ya se han guardado todas las empresas')});
     })
 
@@ -149,7 +149,7 @@ function getById (req, res) {
 
 //Devuelve un perfil por el linkedinID
 function getByLinkedinId (req, res) {
-    
+
     var linkedinId = String(req.params.linkedinId)
     Profiles.find({linkedinId :linkedinId}, (err, profile) => {
         if (err) return res.status(500).send({message:`Error al realizar getById: ${err}`})
@@ -196,11 +196,23 @@ function getProfiles (req, res) {
 
 //Devuelve todos los perfiles
 function getAllProfiles(req, res){
+
+    let params = req.query
+    let query = {};
+    let p = 1
+    let keys = ['puesto', 'label', 'name'];
+    for(let i = 0; i < keys.length; i++){
+        let key = keys[i];
+
+        if (params[key]) {
+            query[key] = new RegExp(params[key], 'i');
+        }
+    }
     
-    Profiles.find({}, (err, allProfiles) => {
+    Profiles.find(query, (err, allProfiles) => {
         if (err) res.status(500).send({message:`Error por parte del servidor al intentar devolver todos los perfiles: ${err}`});
         if (allProfiles.length < 1) res.send(200, {message: 'No hay perfiles guardados en la base de datos'})
-        res.send(200, {allProfiles});
+        return res.send(200, {allProfiles});
     })
 };
 
