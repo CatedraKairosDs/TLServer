@@ -6,7 +6,7 @@ const Companies = require('../models/companies')
 
 //guardado de perfil
 function saveProfiles (req, res){
-    console.log(req.body.puesto)    
+
     let profile = new Profiles()
 
     profile.linkedinId = req.body.linkedinId 
@@ -30,7 +30,7 @@ function saveProfiles (req, res){
     profile.save((err, profileStored) => {
         
         if (err) return res.status(500).send({message: `Error en el lado del sevidor: ${err}`})
-        res.status(200).send({perfil: profileStored})
+        res.status(200).send({message: 'Perfil guardado'})
         saveSkill(profile).then(() => {console.log('ya se han guardado todas las skills')});
         saveCompany(profile).then(() => {console.log('ya se han guardado todas las empresas')});
     })
@@ -208,7 +208,7 @@ function getAllProfiles(req, res){
             query[key] = new RegExp(params[key], 'i');
         }
     }
-    
+
     Profiles.find(query, (err, allProfiles) => {
         if (err) res.status(500).send({message:`Error por parte del servidor al intentar devolver todos los perfiles: ${err}`});
         if (allProfiles.length < 1) res.send(200, {message: 'No hay perfiles guardados en la base de datos'})
