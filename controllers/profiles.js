@@ -149,9 +149,8 @@ function getById (req, res) {
 
 //Devuelve un perfil por el linkedinID
 function getByLinkedinId (req, res) {
-
+    
     var linkedinId = String(req.params.linkedinId)
-
     Profiles.find({linkedinId :linkedinId}, (err, profile) => {
         if (err) return res.status(500).send({message:`Error al realizar getById: ${err}`})
         if(!profile) return res.status(404).send({message: `El perfil con id: `+req.params.linkedinId+` no existe :${err}`}) 
