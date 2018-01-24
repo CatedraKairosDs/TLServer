@@ -19,6 +19,7 @@ function saveUnlabeledProfiles (req, res){
 
 }
 
+// Iterar sobre el array de perfiles asincronamente
 function saveAllProfiles(unlabeledProfiles, length, searchId) {
     var i = 0;
     return Promise.resolve(i).then(function addNextProfile(i) {
@@ -28,6 +29,7 @@ function saveAllProfiles(unlabeledProfiles, length, searchId) {
     })
 }
 
+// Guardar realmente el perfil
 function saveUnlabeledProfile(unlabeledProfileParam, searchId) {
     return new Promise((resolve, reject) => {
         let unlabeledProfile = new UnlabeledProfiles()
