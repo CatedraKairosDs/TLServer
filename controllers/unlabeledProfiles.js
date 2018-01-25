@@ -66,17 +66,23 @@ function getAllUnlabeledProfiles(req, res){
 
     UnlabeledProfiles.find({}, (err, allUnlabeledProfiles) => {
         if (err) res.status(500).send({message:`Error por parte del servidor al intentar devolver todos los perfiles: ${err}`});
-        if (allUnlabeledProfiles.length < 1) res.send(200, {message: 'No hay perfiles guardados en la base de datos'})
         return res.send(200, {allUnlabeledProfiles});
     })
 };
 
 function deleteAllUnlabeledProfiles(req, res){
     var id = req.params.searchId;
-    UnlabeledProfiles.deleteMany({searchId: id}, (err) => {
-        if (err) res.status(500).send({message:`Error en el servidor: ${err}`})
-        res.status(200).send({message: 'Los perfiles han sido eliminados'})
+    UnlabeledProfiles.find({}).count().then((resp) => {
+        if (resp == 0)  {
+            return res.send(200, {message:'No hay perfiles'})
+        } else {
+            UnlabeledProfiles.deleteMany({searchId: id}, (err) => {
+                if (err) res.status(500).send({message:`Error en el servidor: ${err}`})
+                res.status(200).send({message: 'Los perfiles han sido eliminados'})
+            })
+        }
     })
+    
 }
 module.exports = {
     saveUnlabeledProfiles,
