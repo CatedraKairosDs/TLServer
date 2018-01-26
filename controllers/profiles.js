@@ -183,13 +183,16 @@ function getProfiles (req, res) {
             Profiles.find(query).count({})
         ]).then(promisses => {
             const [result, itemCount] = promisses;
-            const pageCount = Math.ceil(itemCount / req.query.limit)
-            return res.send(200, {
-                data: result,
-                meta:{
-                    'totalPages': pageCount
-                }
-            })
+            if (itemCount == 0) {res.send(404, {message: 'No hay perfiles para esa query'})} 
+            else{
+             const pageCount = Math.ceil(itemCount / req.query.limit)
+             return res.send(200, {
+                    data: result,
+                    meta:{
+                        'totalPages': pageCount
+                 }
+             })
+            }
         })
 
     }catch(err){
@@ -213,10 +216,13 @@ function getAllProfiles(req, res){
     }
 
     Profiles.find(query, (err, allProfiles) => {
-        if (err) res.status(500).send({message:`Error por parte del servidor al intentar devolver todos los perfiles: ${err}`});
-        if (allProfiles.length < 1) res.send(200, {message: 'No hay perfiles guardados en la base de datos'})
-        return res.send(200, {allProfiles});
-    })
+        if (allProfiles == 0) {res.send(404, {message: 'No hay perfiles para esa query'})} 
+            else {
+                if (err) res.status(500).send({message:`Error por parte del servidor al intentar devolver todos los perfiles: ${err}`});
+                if (allProfiles.length < 1) res.send(200, {message: 'No hay perfiles guardados en la base de datos'})
+                return res.send(200, {allProfiles});
+            }   
+        })
 };
 
 //update un perfil, propiedades label, puesto y comentario

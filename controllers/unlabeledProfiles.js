@@ -71,6 +71,52 @@ function getAllUnlabeledProfiles(req, res){
     })
 };
 
+
+//devuelve un perfil dependiendo del parámetro de la query: puesto, label, name
+function getUnlabeledProfiles (req, res) {
+    
+    let params = req.query
+    let query = {};
+    let p = 1
+    let keys = ['searchId', 'name'];
+    for(let i = 0; i < keys.length; i++){
+        let key = keys[i];
+
+        if (params[key]) {
+            query[key] = new RegExp(params[key], 'i');
+        }
+    }
+    try{ 
+        
+        let result, itemCount; 
+        Promise.all([
+            UnlabeledProfiles.find(query).sort({_id: -1}).limit(req.query.limit).skip(req.skip).lean().exec(), 
+            UnlabeledProfiles.find(query).count({})
+        ]).then(promisses => {
+            const [result, itemCount] = promisses;
+            if (itemCount == 0) {res.send(404, {message: 'No hay perfiles para esa query'})} 
+            else{
+             const pageCount = Math.ceil(itemCount / req.query.limit)
+             return res.send(200, {
+                    data: result,
+                    meta:{
+                        'totalPages': pageCount
+                 }
+             })
+            }
+        })
+
+    }catch(err){
+        console.log(err)
+    }
+}
+
+
+
+
+
+
+
 function deleteAllUnlabeledProfiles(req, res){
     var id = req.params.searchId;
     UnlabeledProfiles.find({}).count().then((resp) => {
@@ -87,6 +133,7 @@ function deleteAllUnlabeledProfiles(req, res){
 }
 module.exports = {
     saveUnlabeledProfiles,
+    getUnlabeledProfiles,
     getAllUnlabeledProfiles,
     deleteAllUnlabeledProfiles
 }

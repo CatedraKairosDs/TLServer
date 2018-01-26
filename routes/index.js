@@ -24,6 +24,7 @@ router.put('/api-linkedin/v1/profiles/:id', profilesController.updateProfile);
 router.delete('/api-linkedin/v1/profiles/:id', profilesController.deleteProfile);
 
 //unlabeled Profiles
+//router.get('/api-linkedin/v1/unlabeledProfiles', unlabeledProfilesController.getUnlabeledProfiles);
 router.get('/api-linkedin/v1/unlabeledProfiles', unlabeledProfilesController.getAllUnlabeledProfiles);
 
 router.post('/api-linkedin/v1/unlabeledProfiles', unlabeledProfilesController.saveUnlabeledProfiles);
