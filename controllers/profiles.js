@@ -20,7 +20,8 @@ function saveProfiles (req, res){
     profile.skills = JSON.stringify(req.body.skills)
     profile.certificates = JSON.stringify(req.body.certificates)
     profile.awards = JSON.stringify(req.body.awards)
-    profile.voExps = JSON.stringify(req.body.voExps)
+    profile.volExps = JSON.stringify(req.body.volExps)
+    profile.orgs = JSON.stringify(req.body.orgs)
     profile.beneficCauses = JSON.stringify(req.body.beneficCauses)
     profile.recommendations = JSON.stringify(req.body.recommendations)
     profile.courses = JSON.stringify(req.body.courses)
@@ -54,7 +55,8 @@ function saveSkill(profile) {
 //En esta función se busca si existe la skill o no, y si existe, se intenta calcular la clave que le toca.
 function searchForSkill(skillAux) {
     return new Promise((resolve, reject) => {
-        Skills.find({skillName: skillAux}, (err, skill) => {
+        let sAux = RegExp(skillAux, 'i')
+        Skills.find({skillName: sAux}, (err, skill) => {
             if (err){
                 reject(`Error al buscar skill: ${err}`);
                 console.log(`Error al buscar skill: ${err}`)
@@ -104,7 +106,8 @@ function saveCompany(profile){
 function searchForCompany(companyAux){
 
     return new Promise((resolve, reject) => {
-        Companies.find({companyName: companyAux}, (err, company) => {
+        let cAux = RegExp(companyAux, 'i')
+        Companies.find({companyName: cAux}, (err, company) => {
             if (err){
                 reject(`Error al buscar company: ${err}`);
                 console.log(`Error al buscar company: ${err}`)

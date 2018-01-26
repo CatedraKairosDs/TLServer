@@ -3,7 +3,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-
 const unlabeledProfilesSchema = Schema ({
     
     searchId: String,
@@ -17,7 +16,7 @@ const unlabeledProfilesSchema = Schema ({
     certificates: String,
     awards: String,
     orgs: String,
-    voExps: String,
+    volExps: String,
     beneficCauses: String,
     recommendations: String,
     courses: String,
