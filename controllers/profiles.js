@@ -41,7 +41,7 @@ function saveProfiles (req, res){
 
 //Esta función sólo se encarga de sacar las skills de cada perfil.
 function saveSkill(profile) {
-    console.log(`Las skills son ${profile.skills}`)
+    //console.log(`Las skills son ${profile.skills}`)
     var skills = JSON.parse(profile.skills);
     var i = 0;
     return Promise.resolve(i).then(function addNextSkill(i) {
@@ -55,7 +55,21 @@ function saveSkill(profile) {
 //En esta función se busca si existe la skill o no, y si existe, se intenta calcular la clave que le toca.
 function searchForSkill(skillAux) {
     return new Promise((resolve, reject) => {
-        let sAux = RegExp(skillAux, 'i')
+        var arraySkillsAux = skillAux.split(" ");
+        var j = 0;
+        return Promise.resolve(j).then(function checkSkill(j) {
+            console.log(j)
+            if (j > arraySkillsAux.length -1) return;
+            var s = JSON.stringify(arraySkillsAux[j]);
+            let sAux = RegExp(arraySkillsAux[j++], 'i')
+            return newMethodSkills(sAux, j, arraySkillsAux.length, skillAux).then(() => {
+                checkSkill(j)});
+        })
+    })
+}
+
+function newMethodSkills(sAux, j, aLength, skillAux){
+    return new Promise((resolve, reject) => {
         Skills.find({skillName: sAux}, (err, skill) => {
             if (err){
                 reject(`Error al buscar skill: ${err}`);
@@ -63,15 +77,16 @@ function searchForSkill(skillAux) {
             }
             else if(skill.length !== 0) {
                 console.log(`La skill  ${skill} ya estaba guardada`)
-                resolve(`La skill  ${skill} ya estaba guardada`);
+                resolve(j);
+                j = aLength;
             }
-            else if(skill.length === 0) {
+            else if((skill.length===0) && (j == (aLength-1))) {
                 saveSkillName(skillAux).then(resolve).catch(reject);
             }
 
-            })
         });
-    }
+    })
+}    
 
 //Aquí se guarda en la base de datos
 function saveSkillName(skillAux) {
@@ -92,7 +107,7 @@ function saveSkillName(skillAux) {
 
 //Esta función se encarga de sacar las companies de cada perfil
 function saveCompany(profile){
-    console.log(`Las empresas del perfil son ${profile.experience}`)
+    //console.log(`Las empresas del perfil son ${profile.experience}`)
     var companies = JSON.parse(profile.experience)
     var i = 0;
     return Promise.resolve(i).then(function addNextCompany(i) {
@@ -113,7 +128,7 @@ function searchForCompany(companyAux){
                 console.log(`Error al buscar company: ${err}`)
             }
             else if(company.length !== 0) {
-                console.log(`La company  ${company} ya estaba guardada`)
+                //console.log(`La company  ${company} ya estaba guardada`)
                 resolve(`La company ${company} ya estaba guardada`);
             }
             else if(company.length === 0) {
