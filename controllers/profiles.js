@@ -41,29 +41,34 @@ function saveProfiles (req, res){
 
 //Esta función sólo se encarga de sacar las skills de cada perfil.
 function saveSkill(profile) {
-    //console.log(`Las skills son ${profile.skills}`)
     var skills = JSON.parse(profile.skills);
     var i = 0;
     return Promise.resolve(i).then(function addNextSkill(i) {
-        if (i > skills.length -1 ) return;
-        var skillAux = JSON.stringify(skills[i++].skill);
-        return searchForSkill(skillAux).then(() => addNextSkill(i));
+        if (i > skills.length -1 ) {
+            return;
+        } 
+        else{
+                var skillAux = JSON.stringify(skills[i].skill);
+                return searchForSkill(skillAux, i).then((i) => addNextSkill(i));
+            }
+       
     })
-    
 }
 
 //En esta función se busca si existe la skill o no, y si existe, se intenta calcular la clave que le toca.
-function searchForSkill(skillAux) {
+function searchForSkill(skillAux, i) {
     return new Promise((resolve, reject) => {
         var arraySkillsAux = skillAux.split(" ");
         var j = 0;
         return Promise.resolve(j).then(function checkSkill(j) {
-            console.log(j)
-            if (j > arraySkillsAux.length -1) return;
+            if (j > (arraySkillsAux.length-1)) {
+                i = i+1
+                resolve(i);
+                return;
+            }
             var s = JSON.stringify(arraySkillsAux[j]);
             let sAux = RegExp(arraySkillsAux[j++], 'i')
-            return newMethodSkills(sAux, j, arraySkillsAux.length, skillAux).then(() => {
-                checkSkill(j)});
+            return newMethodSkills(sAux, j, arraySkillsAux.length, skillAux).then((j) => checkSkill(j));
         })
     })
 }
@@ -76,11 +81,13 @@ function newMethodSkills(sAux, j, aLength, skillAux){
                 console.log(`Error al buscar skill: ${err}`)
             }
             else if(skill.length !== 0) {
-                console.log(`La skill  ${skill} ya estaba guardada`)
-                resolve(j);
                 j = aLength;
+                resolve(j);
             }
-            else if((skill.length===0) && (j == (aLength-1))) {
+            else if (((skill.length===0) && (j !== aLength))){
+                resolve(j)
+            }
+            else if((skill.length===0) && (j == (aLength))) {
                 saveSkillName(skillAux).then(resolve).catch(reject);
             }
 
