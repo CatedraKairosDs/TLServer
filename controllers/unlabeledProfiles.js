@@ -1,6 +1,7 @@
 'use strict'
 var crypto = require('crypto');
 const UnlabeledProfiles = require('../models/unlabeledProfiles');
+var PythonShell = require('python-shell');
 
 //guardado de perfil
 function saveUnlabeledProfiles (req, res){
@@ -61,7 +62,6 @@ function saveUnlabeledProfile(unlabeledProfileParam, searchId) {
     })
 }
 
-
 //Devuelve todos los perfiles
 function getAllUnlabeledProfiles(req, res){
 
@@ -70,7 +70,6 @@ function getAllUnlabeledProfiles(req, res){
         return res.send(200, {allUnlabeledProfiles});
     })
 };
-
 
 //devuelve un perfil dependiendo del parámetro de la query: puesto, label, name
 function getUnlabeledProfiles (req, res) {
@@ -106,18 +105,12 @@ function getUnlabeledProfiles (req, res) {
             }
         })
 
-    }catch(err){
+    } catch(err){
         console.log(err)
     }
 }
 
-
-
-
-
-
-
-function deleteAllUnlabeledProfiles(req, res){
+function deleteAllUnlabeledProfiles(req, res) { 
     var id = req.params.searchId;
     UnlabeledProfiles.find({}).count().then((resp) => {
         if (resp == 0)  {
@@ -129,12 +122,52 @@ function deleteAllUnlabeledProfiles(req, res){
             })
         }
     })
-    
 }
+
+function predictMlc(req, res) {
+    
+    //var text = '{ "employees" : [{ "firstName":"John" , "lastName":"Doe" },{ "firstName":"Anna" , "lastName":"Smith" },{ "firstName":"Peter" , "lastName":"Jones" } ]}';
+    var classifier = 1
+    var profiles = req.body
+    
+    if (classifier) {
+        //var model = require('../resources');
+        //Aquí se hace la predicción utilizando el modelo.
+        var options = {
+            mode: 'text',
+            scriptPath: '../resources',
+            args: JSON.stringify(profiles)
+        };
+        var cwd = __dirname;
+        console.log(cwd)
+        PythonShell.run('mlc.py', options, cwd, function(err, result) {
+            if (err) {
+                res.status(404).send({message:`Error en el servidor al predecir: ${err}`})
+            } else {
+                console.log('DESDE NODE => ',result)
+                var prediction = result;
+                res.status(200).send({
+                    data: prediction,
+                    message: 'Predicción satisfactoria'
+                })
+            }
+        });
+    } else {
+        next(new Error('No existe el clasificador'));
+    }
+} 
+
+function predictDlc(req, res) {
+    var classifier = require('resources/MODELO.cpkl')
+
+}
+
 module.exports = {
     saveUnlabeledProfiles,
     getUnlabeledProfiles,
     getAllUnlabeledProfiles,
-    deleteAllUnlabeledProfiles
+    deleteAllUnlabeledProfiles,
+    predictMlc,
+    predictDlc
 }
     

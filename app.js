@@ -16,8 +16,8 @@ app.use(function(req, res, next) {
 
 app.use(paginate.middleware(10, 50));
 
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}))
+app.use(bodyParser.json({limit: '50mb'}))
 app.use('', route)
 
 app.set('view engine', 'ejs');

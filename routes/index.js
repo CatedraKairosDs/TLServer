@@ -31,4 +31,8 @@ router.post('/api-linkedin/v1/unlabeledProfiles', unlabeledProfilesController.sa
 
 router.delete('/api-linkedin/v1/unlabeledProfiles/:searchId', unlabeledProfilesController.deleteAllUnlabeledProfiles);
 
+//Predictions
+router.post('/api-linkedin/v1/prediction/mlc', unlabeledProfilesController.predictMlc);
+router.post('/api-linkedin/v1/prediction/dlc', unlabeledProfilesController.predictDlc);
+
 module.exports = router;
