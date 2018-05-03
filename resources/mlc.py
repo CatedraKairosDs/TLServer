@@ -4,10 +4,13 @@ import json
 import sys
 import numpy as np
 import re
+import os
 from collections import Counter
 import math
+import warnings
+warnings.filterwarnings('ignore')
 
-data = json.load(sys.argv[1])
+data = json.loads(sys.argv[1])
 
 def experienceCalculator(exp):
     keyWords = [r"front", r"UX", r"front end", r"back", r"frontend", r"web", r"aplicaciones", r"tester", r"application", r"programador", r"developer", r"development", r"software engineer", r"software", r"programador", r"programadora", r"full stack", r"fullstack", r"back end", r"backend", r"devops", r"sysadmin", r"head", r"analista programador", r"desarrollador", r"scrum", r"agile", r"scrum master", r"agile coach"]
@@ -67,7 +70,8 @@ for i in range(len(data)):
     data_matrix[i,9] = len(data[i]['recommendations'])
     data_matrix[i,10] = 0
 
-clf = joblib.load('AdaBest.pkl', 'r')
+#clf = joblib.load('/Users/robertollopcardenal/Desktop/TFG/MLP/TLServer/resources/AdaBest.pkl', 'r')
+clf = joblib.load('/Users/robertollopcardenal/Desktop/TFG/MLP/TLServer/resources/Random.pkl', 'r')
 prediction_matrix = np.ndarray(shape=(len(data), 2), dtype=object)
 for i in range(len(data)):
     if ('linkedinId' in data[i]):
@@ -82,7 +86,7 @@ data_out = []
 for i in range(prediction_matrix.shape[0]):
     data_outi = {}
     data_outi['linkedinId'] = prediction_matrix[i][0]
-    data_outi['prediction'] = "accept" if prediction_matrix[i][1] == 0 else "refuse"
+    data_outi['prediction'] = "refuse" if prediction_matrix[i][1] == 0 else "accept"
     data_out.append(data_outi)
 
 print json.dumps(data_out)
