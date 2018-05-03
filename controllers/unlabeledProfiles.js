@@ -127,31 +127,38 @@ function deleteAllUnlabeledProfiles(req, res) {
 function predictMlc(req, res) {
     
     //var text = '{ "employees" : [{ "firstName":"John" , "lastName":"Doe" },{ "firstName":"Anna" , "lastName":"Smith" },{ "firstName":"Peter" , "lastName":"Jones" } ]}';
+    
     var classifier = 1
     var profiles = req.body
     
     if (classifier) {
         //var model = require('../resources');
         //Aquí se hace la predicción utilizando el modelo.
-        var options = {
-            mode: 'text',
-            scriptPath: '../resources',
-            args: JSON.stringify(profiles)
-        };
         var cwd = __dirname;
         console.log(cwd)
-        PythonShell.run('mlc.py', options, cwd, function(err, result) {
-            if (err) {
-                res.status(404).send({message:`Error en el servidor al predecir: ${err}`})
-            } else {
-                console.log('DESDE NODE => ',result)
-                var prediction = result;
-                res.status(200).send({
-                    data: prediction,
-                    message: 'Predicción satisfactoria'
-                })
-            }
-        });
+        let prediction = []
+        let profileLength = profiles.length
+        for (let i in profiles) {
+            var options = {
+                mode: 'text',
+                scriptPath: '../resources',
+                args: JSON.stringify(profiles[i])
+            };
+            PythonShell.run('mlc.py', options, cwd, function(err, result) {
+                if (err) {
+                    res.status(404).send({message:`Error en el servidor al predecir: ${err}`})
+                } else {
+                    console.log('DESDE NODE => ',result)
+                    prediction.push(result[0]);
+                    if (prediction.length === profileLength) {
+                        res.status(200).send({
+                            data: prediction,
+                            message: 'Predicción satisfactoria'
+                        })
+                    }
+                }
+            });
+        }
     } else {
         next(new Error('No existe el clasificador'));
     }

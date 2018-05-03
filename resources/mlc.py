@@ -51,42 +51,41 @@ def experienceCalculator(exp):
 
 ## Keys: experience, nJobs, meanTimePerJob, languages, projects, skills, certificates, awards, beneficCauses, recommendations
 
-data_matrix = np.ndarray(shape=(len(data), 11), dtype=object)
-
-for i in range(len(data)):
-    auxExp = experienceCalculator(data[i]['experience'])
-    data_matrix[i,0] = auxExp[0]
-    data_matrix[i,1] = auxExp[1]
-    data_matrix[i,2] = auxExp[2]
-    data_matrix[i,3] = len(data[i]['languages'])
-    if ('projects' in data[i]):
-        data_matrix[i,4] = len(data[i]['projects'])
-    else:
-        data_matrix[i,4] = 0
-    data_matrix[i,5] = len(data[i]['skills'])
-    data_matrix[i,6] = len(data[i]['certificates'])
-    data_matrix[i,7] = len(data[i]['awards'])
-    data_matrix[i,8] = len(data[i]['beneficCauses'])
-    data_matrix[i,9] = len(data[i]['recommendations'])
-    data_matrix[i,10] = 0
+#data_matrix = np.ndarray(shape=(len(data), 11), dtype=object)
+data_aux = np.ndarray(shape=(11), dtype=object)
+#for i in range(len(data)):
+auxExp = experienceCalculator(data['experience'])
+data_aux[0] = auxExp[0]
+data_aux[1] = auxExp[1]
+data_aux[2] = auxExp[2]
+data_aux[3] = len(data['languages'])
+if ('projects' in data):
+    data_aux[4] = len(data['projects'])
+else:
+    data_aux[4] = 0
+data_aux[5] = len(data['skills'])
+data_aux[6] = len(data['certificates'])
+data_aux[7] = len(data['awards'])
+data_aux[8] = len(data['beneficCauses'])
+data_aux[9] = len(data['recommendations'])
+data_aux[10] = 0
 
 #clf = joblib.load('/Users/robertollopcardenal/Desktop/TFG/MLP/TLServer/resources/AdaBest.pkl', 'r')
 clf = joblib.load('/Users/robertollopcardenal/Desktop/TFG/MLP/TLServer/resources/Random.pkl', 'r')
-prediction_matrix = np.ndarray(shape=(len(data), 2), dtype=object)
-for i in range(len(data)):
-    if ('linkedinId' in data[i]):
-        prediction_matrix[i][0] = data[i]['linkedinId']
-    else:
-        prediction_matrix[i][0] = "No ID"
-    prediction_matrix[i][1] = int(clf.predict(data_matrix[i,:].reshape(1, -1)))
-    #print data[i]['label']
-
+prediction_matrix = np.ndarray(shape=(2), dtype=object)
+#for i in range(len(data)):
+if ('linkedinId' in data):
+    prediction_matrix[0] = data['linkedinId']
+else:
+    prediction_matrix[0] = "No ID"
+prediction_matrix[1] = int(clf.predict(data_aux.reshape(1, -1)))
+    #print data['label']
 #print prediction_matrix
-data_out = []
-for i in range(prediction_matrix.shape[0]):
-    data_outi = {}
-    data_outi['linkedinId'] = prediction_matrix[i][0]
-    data_outi['prediction'] = "refuse" if prediction_matrix[i][1] == 0 else "accept"
-    data_out.append(data_outi)
+#data_out = []
+#for i in range(prediction_matrix.shape[0]):
+data_outi = {}
+data_outi['linkedinId'] = prediction_matrix[0]
+data_outi['prediction'] = "refuse" if prediction_matrix[1] == 0 else "accept"
+    #data_out.append(data_outi)
 
-print json.dumps(data_out)
+print json.dumps(data_outi)
